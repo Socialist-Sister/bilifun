@@ -1,0 +1,31 @@
+name: Checks
+on:
+  push:
+  pull_request:
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: npm test
+      - run: npm run check
+      - run: npm run format:check
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - run: npm run build
+      - run: python scripts/verify-release.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bilifun-packages
+          path: |
+            artifacts/bilifun-*.zip
+            artifacts/SHA256SUMS
+      # Actual MV3 loading and media QA currently require the documented local setup.

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BiliFun · 本地验证</title>
+  <style>
+    body { margin:0; padding:48px; color:#253849; background:#f5f8fa; font:16px/1.6 "Segoe UI","Microsoft YaHei",sans-serif; }
+    main { max-width:920px; margin:auto; } h1 { font-size:26px; margin:0 0 8px; } .subtitle { color:#617783; margin:0 0 28px; }
+    #results { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+    .video-list-item { background:white; border:1px solid #dce6ec; border-radius:10px; overflow:hidden; }
+    .cover { height:128px; background:repeating-linear-gradient(120deg,#e1eef4,#e1eef4 28px,#eaf3f7 28px,#eaf3f7 56px); display:flex; align-items:center; justify-content:center; color:#607c8b; font-size:13px; }
+    .bili-video-card__info--tit { padding:16px; margin:0; font-size:16px; } a { color:inherit; text-decoration:none; }
+    .meta { margin:0; padding:0 16px 16px; color:#70828d; font-size:12px; } .unsupported { border:1px dashed #bfccd5; padding:12px; margin-top:20px; font-size:13px; }
+    @media(max-width:600px) { body { padding:24px 16px; } #results { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>搜索：机械键盘 静音</h1>
+    <p class="subtitle">本地模拟结果页 · 用于验证筛选行为，非 B 站真实搜索结果</p>
+    <div id="results">
+      <div class="video-list-item" id="match"><div class="bili-video-card"><a href="https://www.bilibili.com/video/BV1xx411c7mD"><div class="cover">同时包含两个关键词</div><h3 class="bili-video-card__info--tit">静音机械键盘选购指南</h3></a><p class="meta">应保留 · 标题匹配全部关键词</p></div></div>
+      <div class="video-list-item" id="partial"><div class="bili-video-card"><a href="https://www.bilibili.com/video/BV1xx411c7mE"><div class="cover">只包含一个关键词</div><h3 class="bili-video-card__info--tit">机械键盘开箱：青轴声音测试</h3></a><p class="meta">严格模式应隐藏 · 缺少“静音”</p></div></div>
+      <div class="video-list-item" id="irrelevant"><div class="bili-video-card"><a href="https://www.bilibili.com/video/BV1xx411c7mF"><div class="cover">没有包含搜索关键词</div><h3 class="bili-video-card__info--tit">今天又被猫猫叫醒了</h3></a><p class="meta">应隐藏 · 缺少两个关键词</p></div></div>
+      <div class="video-list-item" id="excluded"><div class="bili-video-card"><a href="https://www.bilibili.com/video/BV1xx411c7mG"><div class="cover">包含关键词与可选排除词</div><h3 class="bili-video-card__info--tit">静音机械键盘抽奖活动</h3></a><p class="meta">默认保留 · 输入排除词“抽奖”后隐藏</p></div></div>
+      <div class="video-list-item" id="unknown"><div class="bili-video-card"><a href="https://www.bilibili.com/video/BV1xx411c7mH" aria-label="无可读取标题的视频"><div class="cover"></div></a></div></div>
+    </div>
+    <div class="unsupported" id="unsupported">无法识别的卡片结构，保持原样。</div>
+    <div class="video-list-item" id="nonvideo"><a href="https://space.bilibili.com/1"><h3 class="title">UP 主结果，保持原样</h3></a></div>
+  </main>
+</body>
+</html>

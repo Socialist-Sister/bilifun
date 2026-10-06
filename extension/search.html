@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BiliFun · 独立搜索</title>
+    <link rel="stylesheet" href="search.css" />
+  </head>
+  <body>
+    <header class="masthead">
+      <a class="brand" href="search.html"
+        ><span class="brand-mark" aria-hidden="true">B</span>Bili Search
+        Lens<span class="brand-note">独立搜索</span></a
+      >
+      <nav aria-label="工具">
+        <a href="tools.html">视频与弹幕工具</a><a href="options.html">设置</a>
+      </nav>
+    </header>
+    <main>
+      <section class="search-area" aria-labelledby="heading">
+        <p class="eyebrow">让结果有迹可循</p>
+        <h1 id="heading">搜索视频，自己确认关联。</h1>
+        <form id="search-form">
+          <div class="query-row">
+            <label class="sr-only" for="query">搜索词</label
+            ><input
+              id="query"
+              maxlength="200"
+              placeholder="搜索视频，例如：终末地基建"
+              required
+            /><button id="submit" class="primary" type="submit">搜索</button>
+          </div>
+          <div class="search-controls">
+            <label
+              >来源排序<select id="order">
+                <option value="totalrank">综合排序</option>
+                <option value="pubdate">最新发布</option>
+                <option value="click">最多播放</option>
+              </select></label
+            ><button type="button" id="stop" disabled>停止读取</button
+            ><a
+              id="original"
+              href="https://search.bilibili.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >在 B 站搜索</a
+            >
+          </div>
+          <details class="variants">
+            <summary>添加其他查询写法</summary>
+            <label for="variants">最多两行，与原查询合并去重</label
+            ><textarea
+              id="variants"
+              rows="2"
+              maxlength="402"
+              placeholder="终末地 基建&#10;终末地 工厂蓝图"
+            ></textarea>
+            <p>这些写法仅用于获取更多候选，不保证每条结果都相关。</p>
+          </details>
+        </form>
+        <p class="scope-note">
+          候选来自 B
+          站搜索。默认保留待确认结果；未匹配到搜索词不会自动隐藏。当前使用文字线索，尚未接入语义模型。
+        </p>
+      </section>
+      <section class="result-area" aria-label="搜索结果">
+        <div class="result-toolbar">
+          <h2>视频结果 <span id="count">0</span></h2>
+          <label
+            >显示<select id="filter">
+              <option value="all">全部可见结果</option>
+              <option value="matched">有匹配线索</option>
+              <option value="uncertain">待确认</option>
+              <option value="hidden">已隐藏</option>
+            </select></label
+          ><label
+            >排除标题词<input
+              id="exclusions"
+              maxlength="500"
+              placeholder="例如：抽奖 带货"
+          /></label>
+        </div>
+        <p id="active-search" aria-live="polite"></p>
+        <p id="status" role="status" aria-live="polite">
+          输入搜索词开始。首次使用时只申请 B 站数据接口权限。
+        </p>
+        <div id="empty" class="empty">
+          <span aria-hidden="true">⌕</span>
+          <h3>从一个搜索词开始</h3>
+          <p>视频会汇入同一个列表，翻页不会重复展示。</p>
+        </div>
+        <div id="results" class="results"></div>
+        <div class="pagination">
+          <button id="previous" disabled>上一页</button
+          ><span id="page-label">第 1 / 1 页</span
+          ><button id="next" disabled>下一页</button
+          ><button id="more" class="primary" disabled>读取更多候选</button>
+        </div>
+        <p class="footnote">
+          每页显示 20 个视频。每种查询最多读取 20 个来源页，结果池最多 1,000
+          个；搜索结果仅保存在当前页面，刷新后重新读取。原页面筛选与补位已移至设置中的实验功能。
+        </p>
+      </section>
+    </main>
+    <script src="core.js"></script>
+    <script src="settings.js"></script>
+    <script src="rpc.js"></script>
+    <script src="search-session.js"></script>
+    <script src="search.js"></script>
+  </body>
+</html>

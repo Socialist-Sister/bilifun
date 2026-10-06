@@ -1,0 +1,146 @@
+/* Only an extension-owned marker is changed; no original page styles are saved or overwritten. */
+[data-bili-search-lens-hidden="true"] {
+  display: none !important;
+}
+[data-lens-search-slot-hidden="true"] {
+  display: none !important;
+}
+.lens-refill-slot {
+  box-sizing: border-box;
+  min-width: 0;
+  margin-bottom: 32px;
+}
+.lens-refill-card {
+  color: var(--lens-text, var(--text1, #18191c));
+  font: 14px/1.25
+    var(
+      --lens-font,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Helvetica Neue",
+      Helvetica,
+      Arial,
+      "PingFang SC",
+      "Hiragino Sans GB",
+      "Microsoft YaHei",
+      sans-serif
+    );
+}
+.lens-refill-card a {
+  color: inherit;
+  text-decoration: none;
+}
+.lens-refill-card a:hover {
+  color: #00a1d6;
+}
+.lens-refill-cover {
+  display: block;
+  aspect-ratio: 16/9;
+  background: #eef1f5;
+  border-radius: var(--lens-cover-radius, 6px);
+  overflow: hidden;
+  position: relative;
+}
+.lens-refill-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.lens-refill-stats {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  gap: 8px;
+  padding: var(--lens-stats-top, 16px) var(--lens-stats-right, 8px)
+    var(--lens-stats-bottom, 6px) var(--lens-stats-left, 8px);
+  color: white;
+  background: linear-gradient(180deg, transparent, #000c);
+  font-size: var(--lens-stats-size, 13px);
+  line-height: var(--lens-stats-line, 18px);
+}
+.lens-refill-stats-left,
+.lens-refill-stat {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  white-space: nowrap;
+}
+.lens-refill-stats-left {
+  gap: 16px;
+  overflow: hidden;
+}
+.lens-refill-stat {
+  gap: 4px;
+}
+.lens-refill-stat svg {
+  width: var(--lens-stats-icon-size, 18px);
+  height: var(--lens-stats-icon-size, 18px);
+  flex: none;
+}
+.lens-refill-duration {
+  flex: none;
+  white-space: nowrap;
+}
+.lens-refill-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  box-sizing: border-box;
+  height: var(--lens-title-height, 44px);
+  min-height: var(--lens-title-height, 44px);
+  max-height: var(--lens-title-height, 44px);
+  padding: 0 var(--lens-title-padding-right, 0px) 0 0;
+  margin: var(--lens-title-gap, 10px) 0 0;
+  font-size: var(--lens-title-size, 14px);
+  font-family: var(--lens-title-font, inherit);
+  font-weight: var(--lens-title-weight, 500);
+  line-height: var(--lens-title-line, 22px);
+}
+.lens-refill-title a {
+  font: inherit;
+}
+.lens-refill-info {
+  font-size: var(--lens-info-size, 13px);
+  font-family: var(--lens-info-font, inherit);
+  line-height: var(--lens-info-line, 16px);
+  color: var(--lens-info-color, #9499a0);
+  margin: var(--lens-info-gap, 4px) 0 0;
+  padding: 0;
+}
+.lens-refill-info {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  white-space: nowrap;
+}
+.lens-refill-author {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+.lens-refill-author svg {
+  width: var(--lens-author-icon-size, 16px);
+  height: var(--lens-author-icon-size, 16px);
+  margin-right: 2px;
+  flex: none;
+}
+.lens-refill-author-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lens-refill-date {
+  flex: none;
+  white-space: pre;
+}
+.lens-refill-keyword {
+  font: inherit;
+  color: var(--lens-keyword-color, #ff6699);
+}
+[data-lens-browse-hidden="true"] {
+  display: none !important;
+}

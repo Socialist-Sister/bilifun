@@ -1,0 +1,42 @@
+{
+  "name": "bilifun",
+  "version": "0.5.1",
+  "private": true,
+  "description": "BiliFun: independent Bilibili search, browser media downloads, danmaku and subtitle tools",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/core.test.cjs tests/modules.test.cjs tests/archive.test.cjs tests/relevance.test.cjs tests/tags.test.cjs tests/loading.test.cjs tests/refill.test.cjs tests/pagination.test.cjs tests/search-session.test.cjs",
+    "check": "node scripts/check.cjs && tsc --noEmit",
+    "format:check": "prettier --check \"extension/**/*.{js,ts,html,css,json}\" \"tests/*.cjs\" \"scripts/*.cjs\" package.json tsconfig.json",
+    "test:browser": "node tests/browser.test.cjs",
+    "test:extension": "node tests/extension.test.cjs",
+    "build": "python scripts/build.py",
+    "test:relevance": "node tests/relevance-browser.test.cjs",
+    "test:tags": "node tests/tags-browser.test.cjs",
+    "test:loading": "node tests/loading-browser.test.cjs",
+    "test:refill": "node tests/refill-browser.test.cjs && node tests/refill-controller-browser.test.cjs && node tests/pagination-browser.test.cjs",
+    "test:pagination": "node --test tests/pagination.test.cjs && node tests/pagination-browser.test.cjs",
+    "test:search": "node --test tests/search-session.test.cjs && node tests/search-browser.test.cjs && node tests/astra-settings-browser.test.cjs",
+    "test:panel": "node tests/video-panel-browser.test.cjs",
+    "test:remux": "node --test tests/remux.test.cjs && node tests/browser-remux.test.cjs",
+    "vendor:ffmpeg": "node scripts/vendor-ffmpeg.cjs && prettier --write extension/ffmpeg-license.html",
+    "vendor:mediabunny": "node scripts/vendor-mediabunny.cjs && prettier --write extension/third-party.html",
+    "test:convert": "node tests/convert-browser.test.cjs"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.3.4",
+    "@types/node": "^26.6.3",
+    "mediabunny": "1.61.0",
+    "playwright": "^1.63.0",
+    "prettier": "^3.9.9",
+    "typescript": "^7.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Socialist-Sister/bilifun.git"
+  },
+  "homepage": "https://github.com/Socialist-Sister/bilifun#readme",
+  "bugs": {
+    "url": "https://github.com/Socialist-Sister/bilifun/issues"
+  }
+}

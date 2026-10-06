@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BiliFun · 设置</title>
+    <link rel="stylesheet" href="ui.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>BiliFun</h1>
+        <p class="muted">按自己的条件筛选、保存和观看。各模块独立启用。</p>
+        <a href="search.html">打开独立搜索</a> ·
+        <a href="tools.html">打开视频与弹幕工具</a>
+      </header>
+      <form id="settings-form">
+        <div class="grid">
+          <section class="card">
+            <h2>功能与外观</h2>
+            <label
+              ><input
+                type="checkbox"
+                data-setting="modules.search"
+              />原搜索页筛选与补位（实验性，默认关闭）</label
+            ><label
+              ><input
+                type="checkbox"
+                data-setting="modules.tools"
+              />视频页工具入口</label
+            ><label
+              ><input
+                type="checkbox"
+                data-setting="modules.player"
+              />播放器倍速与快捷键</label
+            ><label
+              ><input
+                type="checkbox"
+                data-setting="modules.browsing"
+              />首页与相关推荐筛选（适配中）</label
+            >
+            <label
+              >主题<select data-setting="ui.theme">
+                <option value="auto">跟随系统</option>
+                <option value="light">浅色</option>
+                <option value="dark">深色</option>
+              </select></label
+            ><label
+              >视频工具入口位置<select data-setting="ui.position">
+                <option value="right">右侧</option>
+                <option value="left">左侧</option>
+              </select></label
+            >
+            <label
+              ><input
+                type="checkbox"
+                data-setting="hiddenSections"
+                data-value="related"
+              />隐藏播放页相关推荐</label
+            ><label
+              ><input
+                type="checkbox"
+                data-setting="hiddenSections"
+                data-value="hotSearch"
+              />隐藏热搜面板</label
+            ><label
+              ><input
+                type="checkbox"
+                data-setting="hiddenSections"
+                data-value="comments"
+              />隐藏评论区</label
+            >
+          </section>
+          <section class="card">
+            <h2>实验性原页面筛选与浏览规则</h2>
+            <label
+              >排除标题词<input
+                data-setting="search.exclusions"
+                maxlength="2000"
+                placeholder="抽奖 带货"
+            /></label>
+            <p class="muted">
+              主要搜索入口已改为独立搜索页。以下文字匹配与跨页补位保留为实验功能，可能误删相关视频；开启后需要刷新
+              B 站搜索页。独立搜索不会套用这些隐藏规则。
+            </p>
+            <label
+              >搜索匹配方式<select data-setting="search.mode">
+                <option value="related">
+                  谨慎去除无关结果（默认，结合关联线索）
+                </option>
+                <option value="all">包含全部关键词（严格）</option>
+                <option value="any">包含任一关键词</option>
+              </select></label
+            >
+            <p class="muted">
+              谨慎模式识别型号不同写法，参考页面已有简介 /
+              标签；保留关键词、别名和目标品牌线索，无关联线索时隐藏，不要求标题逐字出现搜索词。仅同属科技、影视等大类不作为保留依据。
+            </p>
+            <label
+              ><input
+                type="checkbox"
+                data-setting="search.useVideoTags"
+              />同时核对视频页标签（默认启用）</label
+            >
+            <p class="muted">
+              标题信息不足时查询真实视频标签，命中标签即可保留；正在排队或查询时暂时保留，每次查询最多等待
+              25
+              秒。未授权、失败或超过预算时按页面已有信息筛选。严格模式也会匹配标签，关闭此项可恢复纯标题匹配。每页最多核对
+              30 个视频，同时请求最多 2 个，标签在本机缓存 24 小时。
+            </p>
+            <button id="grant-tags" type="button">授权视频标签查询</button>
+            <label
+              ><input
+                type="checkbox"
+                data-setting="search.fillPages"
+              />自动从后续页补齐视频（实验性，默认关闭）</label
+            >
+            <p class="muted">
+              当前页隐藏结果后自动紧凑排列。跨页补位使用同一数据接口权限，保留当前搜索词、排序、时长及分区等条件，每轮最多读取后续
+              3
+              页，去重后按现有规则匹配。可在搜索面板停止；取消、翻页或关闭筛选会终止旧请求。
+            </p>
+            <p id="tag-permission" class="muted" role="status"></p>
+            <label
+              ><input
+                type="checkbox"
+                data-setting="search.wordBoundary"
+              />英文单词边界（Java 不匹配 JavaScript）</label
+            ><label
+              ><input
+                type="checkbox"
+                data-setting="search.segmentChinese"
+              />中文自动分词</label
+            ><label
+              ><input
+                type="checkbox"
+                data-setting="search.hidePromotions"
+              />隐藏已识别的推广卡片</label
+            >
+            <label
+              >屏蔽标题词<input
+                data-setting="search.blockedTitles"
+                placeholder="带货 抽奖" /></label
+            ><label
+              >屏蔽 UP 主（每行 UID 或名字）<textarea
+                data-setting="search.blockedUploaders"
+                data-list="lines"
+              ></textarea></label
+            ><label
+              >UP 主白名单（优先于标题及屏蔽条件）<textarea
+                data-setting="search.allowedUploaders"
+                data-list="lines"
+              ></textarea></label
+            ><label
+              >同义词组（每行用 | 分隔）<textarea
+                data-setting="search.synonyms"
+                data-list="groups"
+                placeholder="AI|人工智能"
+              ></textarea>
+            </label>
+            <div class="split">
+              <label
+                >最小时长（秒，0 不限）<input
+                  type="number"
+                  min="0"
+                  data-setting="search.minDuration" /></label
+              ><label
+                >最大时长（秒，0 不限）<input
+                  type="number"
+                  min="0"
+                  data-setting="search.maxDuration"
+              /></label>
+            </div>
+            <label
+              >最低播放量（0 不限）<input
+                type="number"
+                min="0"
+                data-setting="search.minViews" /></label
+            ><label
+              >发布日期晚于（缺少日期时保留）<input
+                type="date"
+                data-setting="search.afterDate" /></label
+            ><label
+              >允许分区 ID（逗号分隔，留空不限；缺字段时保留）<input
+                data-setting="search.allowedTids"
+                data-list="numbers"
+                placeholder="17,201" /></label
+            ><label
+              >当前候选排序<select data-setting="search.sort">
+                <option value="original">原有顺序</option>
+                <option value="match">关键词匹配数</option>
+                <option value="views">播放量</option>
+                <option value="date">发布时间（需要可用数据）</option>
+              </select></label
+            >
+          </section>
+          <section class="card">
+            <h2>弹幕规则</h2>
+            <p class="muted">
+              用于下载预览、导出和扩展弹幕层；不会修改账号云端屏蔽规则。
+            </p>
+            <label
+              >排除关键词<input
+                data-setting="danmaku.exclusions"
+                placeholder="支持空格及双引号短语" /></label
+            ><label
+              >白名单词（优先保留）<input
+                data-setting="danmaku.whitelist" /></label
+            ><label
+              >正则表达式（每行一个，隔离执行）<textarea
+                data-setting="danmaku.regex"
+                data-list="lines"
+              ></textarea></label
+            ><label
+              >屏蔽类型编号（逗号分隔）<input
+                data-setting="danmaku.blockedModes"
+                data-list="numbers"
+                placeholder="4,5,7" /></label
+            ><small>1–3 滚动，4 底部，5 顶部，6 逆向，7–9 高级类型。</small
+            ><label
+              >屏蔽颜色（十进制编号，逗号分隔）<input
+                data-setting="danmaku.blockedColors"
+                data-list="numbers" /></label
+            ><label
+              >屏蔽发送者散列（每行一个，不是 UID）<textarea
+                data-setting="danmaku.blockedSenders"
+                data-list="lines"
+              ></textarea>
+            </label>
+            <div class="split">
+              <label
+                >最大长度（0 不限）<input
+                  type="number"
+                  min="0"
+                  data-setting="danmaku.maxLength" /></label
+              ><label
+                >重复窗口（秒，0 关闭）<input
+                  type="number"
+                  min="0"
+                  max="120"
+                  data-setting="danmaku.duplicateWindow" /></label
+              ><label
+                >窗口内保留条数（0 不去重）<input
+                  type="number"
+                  min="0"
+                  data-setting="danmaku.duplicateLimit"
+              /></label>
+            </div>
+          </section>
+          <section class="card">
+            <h2>弹幕显示与下载</h2>
+            <div class="split">
+              <label
+                >字号<input
+                  type="number"
+                  min="12"
+                  max="72"
+                  data-setting="danmaku.fontSize" /></label
+              ><label
+                >透明度<input
+                  type="number"
+                  min="0.1"
+                  max="1"
+                  step="0.05"
+                  data-setting="danmaku.opacity" /></label
+              ><label
+                >显示区域比例<input
+                  type="number"
+                  min="0.1"
+                  max="1"
+                  step="0.1"
+                  data-setting="danmaku.area" /></label
+              ><label
+                >弹幕速度<input
+                  type="number"
+                  min="0.25"
+                  max="4"
+                  step="0.25"
+                  data-setting="danmaku.speed" /></label
+              ><label
+                >同时显示上限<input
+                  type="number"
+                  min="1"
+                  max="100"
+                  data-setting="danmaku.density"
+              /></label>
+            </div>
+            <label
+              >并发下载数（1–3）<input
+                type="number"
+                min="1"
+                max="3"
+                data-setting="downloads.concurrent" /></label
+            ><label>文件名模板<input data-setting="downloads.filename" /></label
+            ><small
+              >{title} / {bvid} / {user} / {page} / {part} / {kind}，用 /
+              建立子目录。</small
+            ><label
+              >重名处理<select data-setting="downloads.conflictAction">
+                <option value="uniquify">自动编号</option>
+                <option value="prompt">询问</option>
+                <option value="overwrite">覆盖</option>
+              </select></label
+            >
+          </section>
+          <section class="card">
+            <h2>播放器</h2>
+            <label
+              >默认倍速<input
+                type="number"
+                min="0.25"
+                max="4"
+                step="0.25"
+                data-setting="player.rate" /></label
+            ><label
+              ><input
+                type="checkbox"
+                data-setting="player.rememberRate"
+              />记忆倍速</label
+            ><label
+              ><input
+                type="checkbox"
+                data-setting="player.shortcuts"
+              />快捷键：Alt + ← / → 快退快进</label
+            ><label
+              >跳转秒数<input
+                type="number"
+                min="1"
+                max="120"
+                data-setting="player.seekSeconds"
+            /></label>
+            <p class="muted">输入框内不触发快捷键；不会自动开始播放。</p>
+          </section>
+          <section class="card">
+            <h2>视频与 UP 主专用弹幕规则</h2>
+            <label
+              >规则覆盖（JSON 数组）<textarea
+                id="profiles"
+                placeholder='[{"scope":"BV…","rules":{"exclusions":"剧透"}}]'
+              ></textarea></label
+            ><small
+              >scope 为 BV 号或 up:UID；视频规则优先于 UP
+              主，再优先于全局。保存后会为每组补齐默认字段。</small
+            >
+          </section>
+        </div>
+        <div class="sticky">
+          <button class="primary" type="submit">保存设置</button>
+          <button type="button" id="reset">恢复默认设置</button>
+          <div id="status" role="status" aria-live="polite"></div>
+        </div>
+      </form>
+      <div class="grid">
+        <section class="card">
+          <h2>备份与恢复</h2>
+          <div class="actions">
+            <button id="export" type="button">导出配置</button
+            ><label class="button"
+              >选择配置文件<input
+                id="import"
+                type="file"
+                accept=".json,application/json"
+                hidden
+            /></label>
+          </div>
+          <pre id="import-preview" hidden></pre>
+          <button id="confirm-import" hidden>应用导入配置</button>
+          <p class="muted">
+            备份包含自定义规则和书签，不包含 Cookie、资源链接或下载记录。
+          </p>
+        </section>
+        <section class="card">
+          <h2>本地数据与诊断</h2>
+          <div class="actions">
+            <button id="diagnostics">查看诊断</button
+            ><button id="clear-records">清除已结束任务记录</button>
+          </div>
+          <pre id="diagnostic-output" hidden></pre>
+          <p class="muted">
+            清除记录不会删除已经下载的文件，也不会中断进行中的任务。
+          </p>
+        </section>
+      </div>
+    </main>
+    <script src="settings.js"></script>
+    <script src="options.js"></script>
+    <script src="options-extras.js"></script>
+  </body>
+</html>

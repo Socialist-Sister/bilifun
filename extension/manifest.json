@@ -1,0 +1,64 @@
+{
+  "manifest_version": 3,
+  "name": "BiliFun · 综合工具",
+  "version": "0.5.1",
+  "description": "独立搜索、统一结果与分页、媒体下载和弹幕工具。原页面筛选与补位作为实验功能默认关闭。",
+  "permissions": ["storage", "activeTab", "offscreen"],
+  "optional_permissions": ["downloads", "declarativeNetRequestWithHostAccess"],
+  "optional_host_permissions": [
+    "https://api.bilibili.com/*",
+    "https://*.hdslb.com/*",
+    "https://*.bilivideo.com/*",
+    "https://*.bilivideo.cn/*",
+    "https://*.bilivideo.net/*",
+    "https://*.biliapi.net/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "BiliFun"
+  },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": ["https://search.bilibili.com/*"],
+      "js": [
+        "core.js",
+        "settings.js",
+        "adapter.js",
+        "rpc.js",
+        "refill.js",
+        "pagination.js",
+        "content.js"
+      ],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.bilibili.com/*"],
+      "js": [
+        "core.js",
+        "settings.js",
+        "media.js",
+        "danmaku.js",
+        "adapter.js",
+        "video-panel.js",
+        "site.js"
+      ],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["tools.html"],
+      "matches": ["https://www.bilibili.com/*"]
+    }
+  ],
+  "minimum_chrome_version": "116",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  }
+}

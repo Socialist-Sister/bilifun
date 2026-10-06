@@ -1,0 +1,21 @@
+{
+  "ffmpeg": "5.1.8",
+  "bindings": "0.12.10",
+  "lame": "3.100",
+  "lameCommit": "2badea1974ae36cb8312afe99cff1e6b3b5decee",
+  "emscripten": "3.1.40",
+  "license": "LGPL-2.1-or-later; bindings MIT",
+  "sha256": {
+    "ffmpeg-core.js": "02b6055326238b8767042d96e2ba4e58d54bb4eaad641da60d3e35b932d11733",
+    "ffmpeg-core.wasm": "9fd555ad42ba92d25834a897e372826b082d281c9459582f2f4a3b067a638437"
+  },
+  "sizes": {
+    "ffmpeg-core.js": 84965,
+    "ffmpeg-core.wasm": 2192815
+  },
+  "sources": {
+    "ffmpeg-5.1.8.tar.xz": "56d4daf10c17330a45c8fe11bc260997677ca2432d3d5951dbeb5515c26028cb",
+    "bindings-0.12.10.tar.gz": "3f1c3f94143d11e3bbb322bd8a1a3189965f31162cf7e889fd3b7e21a928d1ea",
+    "lame-source.tar.gz": "0d97ba0776988f5730e0ce1fa936e7c5d6836c757993ba55073513fe89cf410a"
+  }
+}

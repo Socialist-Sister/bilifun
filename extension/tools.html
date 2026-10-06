@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BiliFun · 工具中心</title>
+    <link rel="stylesheet" href="ui.css" />
+    <link rel="stylesheet" href="tools-panel.css" />
+    <script src="tools-embed.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>视频与弹幕工具</h1>
+        <p class="muted">
+          选择分 P，保存可获取的资源，预览每条过滤规则的结果。
+        </p>
+        <a href="search.html">独立搜索</a> ·
+        <a href="options.html">设置与规则</a>
+      </header>
+      <section class="card" id="video-context">
+        <img
+          id="panel-cover"
+          alt="当前视频封面"
+          referrerpolicy="no-referrer"
+          hidden
+        />
+        <div id="auto-state" role="status" aria-live="polite" hidden>
+          准备读取
+        </div>
+        <div class="split">
+          <label
+            >视频链接或 BV / AV 号<input
+              id="video-input"
+              placeholder="https://www.bilibili.com/video/BV…/" /></label
+          ><label
+            >当前分 P<select id="page-select" disabled>
+              <option>先读取视频信息</option>
+            </select></label
+          >
+        </div>
+        <div class="actions">
+          <button id="load" class="primary">读取视频信息</button
+          ><button id="cancel-read" disabled>停止读取</button
+          ><button id="metadata" disabled>导出视频信息</button
+          ><button id="cover" disabled>下载封面</button>
+        </div>
+        <p id="video-title" class="muted"></p>
+        <div id="status" class="status" role="status" aria-live="polite">
+          工具按需联网到 B 站；不会上传规则或下载文件。
+        </div>
+      </section>
+      <nav class="tabs" role="tablist" aria-label="工具模块">
+        <button
+          role="tab"
+          aria-selected="true"
+          aria-controls="media"
+          data-tab="media"
+        >
+          视频 / 音频</button
+        ><button
+          role="tab"
+          aria-selected="false"
+          tabindex="-1"
+          aria-controls="danmaku"
+          data-tab="danmaku"
+        >
+          弹幕</button
+        ><button
+          role="tab"
+          aria-selected="false"
+          tabindex="-1"
+          aria-controls="subtitles"
+          data-tab="subtitles"
+        >
+          字幕 / 书签</button
+        ><button
+          role="tab"
+          aria-selected="false"
+          tabindex="-1"
+          aria-controls="queue"
+          data-tab="queue"
+        >
+          下载任务</button
+        ><button
+          role="tab"
+          aria-selected="false"
+          tabindex="-1"
+          aria-controls="search"
+          data-tab="search"
+        >
+          旧检索（实验）
+        </button>
+      </nav>
+      <section id="media" class="card" role="tabpanel">
+        <h2>下载当前分 P</h2>
+        <button id="get-streams">读取 / 刷新画质</button>
+        <div class="split">
+          <label
+            >画质<select id="video-track">
+              <option value="">未读取</option>
+            </select></label
+          >
+        </div>
+        <p class="muted panel-helper-hint">
+          视频会自动合并声音；音质可在高级功能中调整。
+        </p>
+        <div class="panel-download-actions">
+          <button id="download-complete" class="primary">下载视频</button>
+          <button id="download-audio">仅下载音频</button>
+        </div>
+        <details id="media-advanced" class="advanced-tools">
+          <summary>高级功能</summary>
+          <label
+            >音质<select id="audio-track">
+              <option value="">未读取</option>
+            </select></label
+          >
+          <label
+            >成品格式<select id="complete-container">
+              <option value="mp4">MP4（快速无损重封装）</option>
+              <option value="mkv">MKV（内置 FFmpeg，最大 128 MiB）</option>
+            </select></label
+          >
+          <div class="split">
+            <label
+              >音频格式<select id="audio-format">
+                <option value="m4a">M4A（原音质）</option>
+                <option value="mp3">MP3 · 192 kbps</option>
+                <option value="aac">AAC / M4A · 192 kbps</option>
+              </select></label
+            ><button id="convert-current-audio">下载所选格式音频</button>
+          </div>
+          <p class="muted">
+            内置精简 FFmpeg 处理 MKV
+            和音频转码，不需要额外安装。高级转换源文件合计最大 128 MiB，最长 1
+            小时。
+          </p>
+          <div class="actions">
+            <button id="download-both">分别下载音视频轨道</button>
+            <button id="download-video">仅下载无声视频</button>
+          </div>
+          <div id="direct-tracks"></div>
+          <details>
+            <summary>批量下载多个分 P</summary>
+            <div id="batch-pages"></div>
+            <button id="batch-download">批量下载 MP4</button>
+            <p class="muted">
+              沿用所选画质与音轨，每个分 P 保存为一个带声音的 MP4。
+              任务依次处理；某个分 P
+              缺少所选轨道时停止添加后续任务，已加入的任务继续。
+            </p>
+          </details>
+          <p id="media-estimate" class="muted">读取画质后显示估算大小。</p>
+          <p class="muted">
+            普通 MP4 使用快速重封装。支持未加密 AVC / HEVC / AV1 视频 + AAC
+            音频，最长 1 小时、音视频合计 2 GiB。输出为分片
+            MP4，播放兼容性取决于播放器及编码。退出浏览器会中断，可在任务页重试。
+          </p>
+          <p class="muted">
+            分轨下载会分别保存视频和音频。默认并发 2
+            个任务；文件名及重复处理可在设置页调整。
+          </p>
+        </details>
+      </section>
+      <section id="danmaku" class="card" role="tabpanel" hidden>
+        <h2>弹幕预览与导出</h2>
+        <div class="actions">
+          <button id="get-danmaku" class="primary">获取当前分 P 弹幕</button
+          ><button id="cancel-danmaku" disabled>取消获取</button
+          ><label class="button"
+            >导入本地 JSON / XML / ASS<input
+              id="import-danmaku"
+              type="file"
+              accept=".json,.xml,.ass"
+              hidden
+          /></label>
+        </div>
+        <p id="danmaku-coverage" class="muted">
+          只获取当前可访问的数据，不代表全部历史弹幕。
+        </p>
+        <div class="split">
+          <label
+            >排除词<input
+              id="danmaku-exclusions"
+              placeholder="空格分词，双引号保留短语" /></label
+          ><label>白名单词<input id="danmaku-whitelist" /></label>
+        </div>
+        <label
+          >正则表达式（每行一个，最多 3 秒隔离执行）<textarea
+            id="danmaku-regex"
+          ></textarea>
+        </label>
+        <div class="actions">
+          <button id="apply-filter">预览过滤结果</button
+          ><button id="save-rules">保存为全局弹幕规则</button
+          ><button id="save-video-rules">保存为本视频规则</button>
+        </div>
+        <p id="filter-count" class="status" role="status">尚未获取弹幕</p>
+        <div class="split">
+          <label
+            >导出内容<select id="export-source">
+              <option value="filtered">过滤后的弹幕</option>
+              <option value="raw">原始获取数据</option>
+            </select></label
+          ><label
+            >格式<select id="danmaku-format">
+              <option value="xml">XML</option>
+              <option value="json">JSON（含获取范围）</option>
+              <option value="ass">ASS（普通弹幕轨道）</option>
+            </select></label
+          >
+        </div>
+        <button id="export-danmaku">导出弹幕文件</button
+        ><label
+          >在弹幕列表中搜索<input
+            id="list-query"
+            placeholder="输入词语" /></label
+        ><label
+          ><input
+            id="show-rejected"
+            type="checkbox"
+          />只看被过滤的弹幕及原因</label
+        >
+        <div class="scroll">
+          <label
+            >列表类型<select id="list-mode">
+              <option value="">全部类型</option>
+              <option value="1">普通滚动（1）</option>
+              <option value="4">底部（4）</option>
+              <option value="5">顶部（5）</option>
+              <option value="6">逆向（6）</option>
+              <option value="7">高级（7）</option>
+              <option value="8">代码（8）</option>
+              <option value="9">BAS（9）</option>
+            </select></label
+          >
+          <table>
+            <thead>
+              <tr>
+                <th>时间</th>
+                <th>内容</th>
+                <th>处理原因</th>
+              </tr>
+            </thead>
+            <tbody id="danmaku-list"></tbody>
+          </table>
+        </div>
+        <small>列表最多显示 500 条；导出包含全部已获取条目。</small>
+      </section>
+      <section id="subtitles" class="card" role="tabpanel" hidden>
+        <h2>字幕与时间戳书签</h2>
+        <button id="get-subtitles">读取现有字幕轨道</button>
+        <div class="split">
+          <label
+            >字幕语言<select id="subtitle-track">
+              <option value="">未读取</option>
+            </select></label
+          ><label
+            >保存格式<select id="subtitle-format">
+              <option value="srt">SRT</option>
+              <option value="vtt">WebVTT</option>
+              <option value="json">原始 JSON</option>
+            </select></label
+          >
+        </div>
+        <button id="export-subtitle">下载字幕</button
+        ><label
+          >字幕文本检索<input
+            id="subtitle-query"
+            placeholder="下载字幕后可检索"
+        /></label>
+        <div id="subtitle-results"></div>
+        <h3>时间戳书签</h3>
+        <div class="split">
+          <label
+            >时间（秒）<input
+              id="bookmark-time"
+              type="number"
+              min="0"
+              value="0" /></label
+          ><label>备注<input id="bookmark-note" maxlength="1000" /></label>
+        </div>
+        <div class="actions">
+          <button id="save-bookmark">保存书签</button
+          ><button id="export-bookmarks">导出本视频书签</button>
+        </div>
+        <div id="bookmark-list"></div>
+      </section>
+      <section id="queue" class="card" role="tabpanel" hidden>
+        <h2>下载任务</h2>
+        <div class="actions"><button id="refresh-tasks">刷新任务</button></div>
+        <p id="queue-empty" class="muted">
+          还没有下载任务，选择视频后点击下载。
+        </p>
+        <section id="track-task-section" hidden>
+          <h3>音频与分轨任务</h3>
+          <div class="actions">
+            <button id="clear-tasks">清除已结束记录</button>
+          </div>
+          <div class="scroll">
+            <table class="task-list-table">
+              <thead>
+                <tr>
+                  <th>视频 / 分 P</th>
+                  <th>类型与状态</th>
+                  <th>进度</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="tasks"></tbody>
+            </table>
+          </div>
+        </section>
+        <details id="queue-advanced" class="advanced-tools">
+          <summary>高级功能</summary>
+          <h3>处理已有文件</h3>
+          <p class="muted">
+            选择文件后在插件内处理，文件不会上传。每次源文件合计不超过 128
+            MiB。关闭浏览器会中断。
+          </p>
+          <div class="split">
+            <label
+              >视频文件（合并时需要）<input
+                id="local-video"
+                type="file"
+                accept=".mp4,.m4s,.mkv" /></label
+            ><label
+              >音频 / 带声音的 MP4<input
+                id="local-audio"
+                type="file"
+                accept=".m4a,.m4s,.aac,.mp3,.mp4,.wav"
+            /></label>
+          </div>
+          <div class="split">
+            <label
+              >输出<select id="local-format">
+                <option value="mp4">MP4 · 合并音视频</option>
+                <option value="mkv">MKV · 合并音视频</option>
+                <option value="mp3">MP3 · 提取并转码音频</option>
+                <option value="aac">M4A · 提取并转码 AAC</option>
+                <option value="m4a">M4A · 无损提取 AAC</option>
+              </select></label
+            ><button id="convert-local">处理所选文件</button>
+          </div>
+        </details>
+      </section>
+      <section id="search" class="card" role="tabpanel" hidden>
+        <p>
+          <a href="search.html">使用主要入口：独立搜索页</a> ·
+          以下有限检索使用旧筛选规则，仅供实验。
+        </p>
+        <h2>有限扩展检索</h2>
+        <p class="muted">
+          用户主动检索后续页或不同排序，合并并去重；不保证找全，也不消除服务端排序影响。
+        </p>
+        <label>查询<input id="search-keyword" maxlength="200" /></label>
+        <div class="split">
+          <label
+            >每种排序的页数<select id="search-pages">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select></label
+          ><label
+            ><input id="search-multiple" type="checkbox" />合并综合 / 最新 /
+            最多播放</label
+          >
+        </div>
+        <div class="actions">
+          <button id="run-search">开始检索</button
+          ><button id="cancel-search" disabled>停止后续请求</button
+          ><button id="save-search">保存查询</button>
+        </div>
+        <div id="saved-searches"></div>
+        <p id="search-count" role="status"></p>
+        <div id="search-results"></div>
+      </section>
+    </main>
+    <script src="core.js"></script>
+    <script src="settings.js"></script>
+    <script src="media.js"></script>
+    <script src="danmaku.js"></script>
+    <script src="archive.js"></script>
+    <script src="rpc.js"></script>
+    <script src="tools.js"></script>
+    <script src="tools-extras.js"></script>
+    <script src="tools-convert.js"></script>
+  </body>
+</html>

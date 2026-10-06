@@ -1,0 +1,21 @@
+name: 问题反馈
+description: 提交可复现、脱敏的问题
+body:
+  - type: input
+    id: environment
+    attributes:
+      label: 扩展版本与浏览器版本
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 操作步骤、预期与实际行为
+      description: 注明模块、页面类型和是否登录；不要填写 Cookie、签名 URL 或个人下载路径。
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: 可选脱敏诊断与样例
+      description: 使用设置页诊断 JSON；不要附外部下载器资源导出或私人笔记。

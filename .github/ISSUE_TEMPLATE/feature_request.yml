@@ -1,0 +1,17 @@
+name: 功能建议
+description: 根据 TODO 功能编号提出范围明确的建议
+body:
+  - type: input
+    id: feature
+    attributes:
+      label: 对应 TODO 编号（若有）
+  - type: textarea
+    id: need
+    attributes:
+      label: 场景与希望解决的问题
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 可验收行为与边界
