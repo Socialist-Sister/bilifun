@@ -27,7 +27,7 @@ for folder in ["extension","tests","scripts",".github","third-party"]:
     for file in (ROOT/folder).rglob("*"):
         if file.is_file() and (file.suffix in {".js",".cjs",".ts",".json",".html",".css",".py",".md",".yml",".sh",".wasm",".xz",".gz",".txt"} or file.name == "COPYING") and "__pycache__" not in file.parts and file.name not in {"config.json","launcher.cmd","com.bilisearchlens.helper.json"}:
             source.append((file,file.relative_to(ROOT).as_posix()))
-for filename in ["README.md","LICENSE","TODO.md","VERIFICATION.md","PRIVACY.md","CONTRIBUTING.md","CHANGELOG.md","ARCHITECTURE.md","CAPABILITIES.md","package.json","package-lock.json","tsconfig.json",".gitignore",".prettierignore"]:
+for filename in ["README.md","LICENSE","TODO.md","VERIFICATION.md","PRIVACY.md","CONTRIBUTING.md","CHANGELOG.md","ARCHITECTURE.md","CAPABILITIES.md","package.json","package-lock.json","tsconfig.json",".gitignore",".gitattributes",".prettierignore"]:
     file=ROOT/filename
     if not file.exists():raise FileNotFoundError(f"Required release document missing: {filename}")
     source.append((file,filename))

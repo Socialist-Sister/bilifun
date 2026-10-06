@@ -1,0 +1,7 @@
+# Vendored files are verified by exact byte hashes; never normalize their EOLs.
+extension/ffmpeg-core.js -text
+extension/vendor-mediabunny.js -text
+*.wasm -text
+*.xz -text
+*.gz -text
+*.m4s -text
